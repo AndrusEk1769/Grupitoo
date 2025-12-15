@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.MainPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="TerviseJälgija"
+             BackgroundColor="#FAF8F5">
+
+    <ContentPage.BindingContext>
+        <viewmodel:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Tervituskaart -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#E8F5E9" 
+                   BorderColor="#C8E6C9"
+                   Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding CurrentUser.Name, StringFormat='Tere, {0}! 👋'}" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#2E7D32"/>
+                    <Label Text="{Binding DateTime.Now, StringFormat='Täna on {0:dddd, dd MMMM yyyy}'}" 
+                           FontSize="14"
+                           TextColor="#558B2F"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Päeva eesmärgid -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="📊 Päeva kokkuvõte" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#37474F"/>
+
+                    <!-- Kalorid -->
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Text="🍎" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Kalorid" FontSize="14" TextColor="#757575"/>
+                            <Label FontSize="16" FontAttributes="Bold" TextColor="#2E7D32">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} / {1} kcal">
+                                        <Binding Path="TodayCalories" />
+                                        <Binding Path="CurrentUser.DailyCalorieGoal" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" 
+                               Text="{Binding CaloriesProgress, StringFormat='{0:P0}'}" 
+                               FontSize="14" TextColor="#2E7D32"/>
+                    </Grid>
+                    <ProgressBar Progress="{Binding CaloriesProgress}" 
+                               ProgressColor="#4CAF50" 
+                               BackgroundColor="#E8F5E9"/>
+
+                    <!-- Vesi -->
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,0">
+                        <Label Text="💧" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Vesi" FontSize="14" TextColor="#757575"/>
+                            <Label FontSize="16" FontAttributes="Bold" TextColor="#2196F3">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} / {1} ml">
+                                        <Binding Path="TodayWater" />
+                                        <Binding Path="CurrentUser.DailyWaterGoal" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" 
+                               Text="{Binding WaterProgress, StringFormat='{0:P0}'}" 
+                               FontSize="14" TextColor="#2196F3"/>
+                    </Grid>
+                    <ProgressBar Progress="{Binding WaterProgress}" 
+                               ProgressColor="#2196F3" 
+                               BackgroundColor="#E3F2FD"/>
+
+                    <!-- Treening -->
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,0">
+                        <Label Text="🏃" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Treening" FontSize="14" TextColor="#757575"/>
+                            <Label FontSize="16" FontAttributes="Bold" TextColor="#FF9800">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} / {1} min">
+                                        <Binding Path="TodayExercise" />
+                                        <Binding Path="CurrentUser.DailyExerciseGoal" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" 
+                               Text="{Binding ExerciseProgress, StringFormat='{0:P0}'}" 
+                               FontSize="14" TextColor="#FF9800"/>
+                    </Grid>
+                    <ProgressBar Progress="{Binding ExerciseProgress}" 
+                               ProgressColor="#FF9800" 
+                               BackgroundColor="#FFF3E0"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Kiired nupud -->
+            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" 
+                  ColumnSpacing="12" RowSpacing="12">
+
+                <Frame Grid.Column="0" Grid.Row="0" 
+                       CornerRadius="12" 
+                       BackgroundColor="#4CAF50" 
+                       Padding="0"
+                       HasShadow="True">
+                    <Button Text="🍎 Lisa Toit" 
+                            Command="{Binding GoToFoodCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="80"/>
+                </Frame>
+
+                <Frame Grid.Column="1" Grid.Row="0" 
+                       CornerRadius="12" 
+                       BackgroundColor="#2196F3" 
+                       Padding="0"
+                       HasShadow="True">
+                    <Button Text="💧 Lisa Vesi" 
+                            Command="{Binding GoToWaterCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="80"/>
+                </Frame>
+
+                <Frame Grid.Column="0" Grid.Row="1" 
+                       CornerRadius="12" 
+                       BackgroundColor="#FF9800" 
+                       Padding="0"
+                       HasShadow="True">
+                    <Button Text="🏃 Lisa Treening" 
+                            Command="{Binding GoToExerciseCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="80"/>
+                </Frame>
+
+                <Frame Grid.Column="1" Grid.Row="1" 
+                       CornerRadius="12" 
+                       BackgroundColor="#9C27B0" 
+                       Padding="0"
+                       HasShadow="True">
+                    <Button Text="📊 Statistika" 
+                            Command="{Binding GoToStatsCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="80"/>
+                </Frame>
+            </Grid>
+
+            <!-- Viimased tegevused -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="🕒 Viimased tegevused" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#37474F"/>
+
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <!-- Näidistegevused -->
+                        <Frame CornerRadius="10" 
+                               BackgroundColor="#F5F5F5" 
+                               BorderColor="#EEEEEE"
+                               Padding="15"
+                               Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowSpacing="5">
+                                <Label Grid.Column="0" 
+                                       Text="🍎" 
+                                       FontSize="24"
+                                       VerticalOptions="Center"/>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Õun - 95 kcal" 
+                                           FontSize="14"
+                                           TextColor="#424242"/>
+                                    <Label Text="10:30" 
+                                           FontSize="12"
+                                           TextColor="#9E9E9E"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" 
+                                       Text="→" 
+                                       FontSize="16"
+                                       TextColor="#BDBDBD"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+
+                        <Frame CornerRadius="10" 
+                               BackgroundColor="#F5F5F5" 
+                               BorderColor="#EEEEEE"
+                               Padding="15"
+                               Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowSpacing="5">
+                                <Label Grid.Column="0" 
+                                       Text="💧" 
+                                       FontSize="24"
+                                       VerticalOptions="Center"/>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Vesi - 500 ml" 
+                                           FontSize="14"
+                                           TextColor="#424242"/>
+                                    <Label Text="11:15" 
+                                           FontSize="12"
+                                           TextColor="#9E9E9E"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" 
+                                       Text="→" 
+                                       FontSize="16"
+                                       TextColor="#BDBDBD"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+
+                        <Frame CornerRadius="10" 
+                               BackgroundColor="#F5F5F5" 
+                               BorderColor="#EEEEEE"
+                               Padding="15"
+                               Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowSpacing="5">
+                                <Label Grid.Column="0" 
+                                       Text="🏃" 
+                                       FontSize="24"
+                                       VerticalOptions="Center"/>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Jooksmine - 30 min" 
+                                           FontSize="14"
+                                           TextColor="#424242"/>
+                                    <Label Text="08:00" 
+                                           FontSize="12"
+                                           TextColor="#9E9E9E"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" 
+                                       Text="→" 
+                                       FontSize="16"
+                                       TextColor="#BDBDBD"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <Button Text="🔄 Värskenda andmeid"
+                            Command="{Binding RefreshData}"
+                            BackgroundColor="#78909C"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="40"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

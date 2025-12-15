@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.Views.FoodPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="Lisa Toit"
+             BackgroundColor="#FAF8F5">
+
+    <ContentPage.BindingContext>
+        <viewmodel:FoodViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Pealkiri -->
+            <Label Text="🍎 Lisa uus toidu sissekanne" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   TextColor="#2E7D32"/>
+
+            <!-- Sisestusvorm -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Toidu nimi -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Toidu nimi" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#37474F"/>
+                        <Entry Text="{Binding FoodName}" 
+                               Placeholder="Nt: Õun, võileib, salat..."
+                               BackgroundColor="#F5F5F5"
+                               TextColor="#212121"
+                               ClearButtonVisibility="WhileEditing"/>
+                    </VerticalStackLayout>
+
+                    <!-- Kogus -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Kogus" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#37474F"/>
+                        <Entry Text="{Binding Amount}" 
+                               Placeholder="Nt: 1 tk, 200 g, 2 spl..."
+                               BackgroundColor="#F5F5F5"
+                               TextColor="#212121"
+                               ClearButtonVisibility="WhileEditing"/>
+                    </VerticalStackLayout>
+
+                    <!-- Kalorid -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Kalorid (kcal)" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#37474F"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Entry Grid.Column="0" 
+                                   Text="{Binding Calories}"
+                                   Placeholder="0"
+                                   Keyboard="Numeric"
+                                   BackgroundColor="#F5F5F5"
+                                   TextColor="#212121"/>
+                            <Label Grid.Column="1" 
+                                   Text="kcal" 
+                                   FontSize="14"
+                                   TextColor="#757575"
+                                   VerticalOptions="Center"
+                                   Margin="10,0,0,0"/>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Kategooria -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Kategooria" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#37474F"/>
+                        <Picker Title="Vali kategooria..."
+                                ItemsSource="{Binding Categories}"
+                                SelectedItem="{Binding SelectedCategory}"
+                                BackgroundColor="#F5F5F5"
+                                TextColor="#212121">
+                            <Picker.ItemDisplayBinding>
+                                <Binding Path="."/>
+                            </Picker.ItemDisplayBinding>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                    <!-- Lisa nupp -->
+                    <Button Text="✅ Lisa toit" 
+                            Command="{Binding AddFoodCommand}"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="50"
+                            Margin="0,10,0,0"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Kiired valikud -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="⚡ Kiired valikud" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#37474F"/>
+
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+                        <Button Grid.Column="0" 
+                                Text="🍎 Õun"
+                                Command="{Binding QuickAddCommand}"
+                                CommandParameter="apple"
+                                BackgroundColor="#E8F5E9"
+                                TextColor="#2E7D32"
+                                CornerRadius="8"
+                                HeightRequest="50"/>
+
+                        <Button Grid.Column="1" 
+                                Text="🍌 Banaan"
+                                Command="{Binding QuickAddCommand}"
+                                CommandParameter="banana"
+                                BackgroundColor="#FFF3E0"
+                                TextColor="#EF6C00"
+                                CornerRadius="8"
+                                HeightRequest="50"/>
+
+                        <Button Grid.Column="2" 
+                                Text="🥪 Võileib"
+                                Command="{Binding QuickAddCommand}"
+                                CommandParameter="sandwich"
+                                BackgroundColor="#E3F2FD"
+                                TextColor="#1565C0"
+                                CornerRadius="8"
+                                HeightRequest="50"/>
+
+                        <Button Grid.Column="3" 
+                                Text="💧 Vesi"
+                                Command="{Binding QuickAddCommand}"
+                                CommandParameter="water"
+                                BackgroundColor="#E0F7FA"
+                                TextColor="#00838F"
+                                CornerRadius="8"
+                                HeightRequest="50"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Tänased sissekanded -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="📅 Tänased sissekanded" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="#37474F"/>
+
+                    <CollectionView ItemsSource="{Binding TodayFoodEntries}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame CornerRadius="10" 
+                                       BackgroundColor="#F5F5F5" 
+                                       BorderColor="#EEEEEE"
+                                       Padding="15"
+                                       Margin="0,0,0,8">
+                                    <Grid ColumnDefinitions="*,Auto,Auto" 
+                                          RowSpacing="5">
+                                        <VerticalStackLayout Grid.Column="0" 
+                                                             Spacing="3">
+                                            <Label Text="{Binding FoodName}" 
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#37474F"/>
+                                            <Label Text="{Binding Amount}" 
+                                                   FontSize="12"
+                                                   TextColor="#757575"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" 
+                                               Text="{Binding Calories, StringFormat='{0} kcal'}" 
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="#2E7D32"
+                                               VerticalOptions="Center"
+                                               Margin="10,0,0,0"/>
+                                        <Button Grid.Column="2" 
+                                                Text="🗑️"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FoodViewModel}}, 
+                                                                  Path=DeleteFoodCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Transparent"
+                                                TextColor="#F44336"
+                                                FontSize="16"
+                                                WidthRequest="40"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Text="{Binding TodayFoodEntries.Count, StringFormat='Kokku: {0} sissekannet'}" 
+                           FontSize="14"
+                           TextColor="#757575"
+                           HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

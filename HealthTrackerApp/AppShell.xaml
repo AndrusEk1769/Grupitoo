@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="HealthTrackerApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:HealthTrackerApp"
+    xmlns:views="clr-namespace:HealthTrackerApp.Views"
+    Title="HealthTrackerApp"
+    Shell.NavBarIsVisible="False">
+
+    <Shell.FlyoutBehavior>Disabled</Shell.FlyoutBehavior>
+
+    <!-- Tab Bar struktuur -->
+    <TabBar>
+        <!-- Pealeht -->
+        <Tab Title="Kodu" Icon="home.png">
+            <ShellContent 
+                Title="Home"
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="MainPage" />
+        </Tab>
+
+        <!-- Toitude leht -->
+        <Tab Title="Toit" Icon="food.png">
+            <ShellContent 
+                Title="Food"
+                ContentTemplate="{DataTemplate views:FoodPage}"
+                Route="FoodPage" />
+        </Tab>
+
+        <!-- Vee leht (placeholder) -->
+        <Tab Title="Vesi" Icon="water.png">
+            <ShellContent 
+                Title="Water"
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="WaterPage" />
+        </Tab>
+
+        <!-- Statistika (placeholder) -->
+        <Tab Title="Statistika" Icon="stats.png">
+            <ShellContent 
+                Title="Stats"
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="StatsPage" />
+        </Tab>
+    </TabBar>
+
+</Shell>
