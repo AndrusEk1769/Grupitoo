@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.Views.PantryPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="Lao vaade"
+             BackgroundColor="#FAF8F5">
+
+    <ContentPage.BindingContext>
+        <viewmodel:PantryViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <Label Text="🏠 Lao vaade – koduste toiduainete haldus"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#37474F" />
+
+            <!-- Uue toiduaine lisamine -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#FFFFFF"
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="➕ Lisa toiduaine"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#37474F" />
+
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <!-- Nimi -->
+                        <Entry Grid.Row="0" Grid.ColumnSpan="2"
+                               Text="{Binding NewName}"
+                               Placeholder="Nimi (nt: piim, muna, pasta...)"
+                               BackgroundColor="#F5F5F5"
+                               TextColor="#212121"
+                               ClearButtonVisibility="WhileEditing" />
+
+                        <!-- Kogus -->
+                        <Entry Grid.Row="1" Grid.Column="0"
+                               Text="{Binding NewQuantity}"
+                               Placeholder="Kogus"
+                               Keyboard="Numeric"
+                               BackgroundColor="#F5F5F5"
+                               TextColor="#212121" />
+
+                        <!-- Ühik -->
+                        <Picker Grid.Row="1" Grid.Column="1"
+                                Title="Ühik"
+                                ItemsSource="{Binding UnitOptions}"
+                                SelectedItem="{Binding NewUnit}"
+                                BackgroundColor="#F5F5F5"
+                                TextColor="#212121" />
+
+                        <!-- Kategooria -->
+                        <Picker Grid.Row="2" Grid.Column="0"
+                                Title="Kategooria"
+                                ItemsSource="{Binding CategoryOptions}"
+                                SelectedItem="{Binding NewCategory}"
+                                BackgroundColor="#F5F5F5"
+                                TextColor="#212121" />
+
+                        <!-- Lisa nupp -->
+                        <Button Grid.Row="2" Grid.Column="1"
+                                Text="+"
+                                Command="{Binding AddItemCommand}"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="50"
+                                WidthRequest="50" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Tabel / nimekiri -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#FFFFFF"
+                   BorderColor="#E0E0E0"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                        <Label Text="Toode" FontSize="14" FontAttributes="Bold" TextColor="#37474F" />
+                        <Label Grid.Column="1" Text="Kogus" FontSize="14" FontAttributes="Bold" TextColor="#37474F" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="2" Text="Staatus" FontSize="14" FontAttributes="Bold" TextColor="#37474F" HorizontalTextAlignment="Center" />
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding Items}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame CornerRadius="10"
+                                       BackgroundColor="#F5F5F5"
+                                       BorderColor="#EEEEEE"
+                                       Padding="12"
+                                       Margin="0,0,0,8">
+                                    <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
+
+                                        <!-- Toode -->
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Name}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#37474F">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsOutOfStock}" Value="True">
+                                                    <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                    <Setter Property="TextColor" Value="#9E9E9E" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+
+                                        <!-- Kogus (-, väärtus, +) -->
+                                        <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                            <Button Text="−"
+                                                    FontSize="16"
+                                                    WidthRequest="36"
+                                                    HeightRequest="36"
+                                                    CornerRadius="8"
+                                                    BackgroundColor="#FFFFFF"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:PantryViewModel}}, Path=DecreaseCommand}"
+                                                    CommandParameter="{Binding .}" />
+
+                                            <Label Text="{Binding QuantityDisplay}"
+                                                   FontSize="14"
+                                                   TextColor="#37474F"
+                                                   VerticalOptions="Center"
+                                                   HorizontalTextAlignment="Center"
+                                                   WidthRequest="80" />
+
+                                            <Button Text="+"
+                                                    FontSize="16"
+                                                    WidthRequest="36"
+                                                    HeightRequest="36"
+                                                    CornerRadius="8"
+                                                    BackgroundColor="#FFFFFF"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:PantryViewModel}}, Path=IncreaseCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                        </HorizontalStackLayout>
+
+                                        <!-- Staatus -->
+                                        <Button Grid.Column="2"
+                                                Text="{Binding StatusDisplay}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:PantryViewModel}}, Path=ToggleOutOfStockCommand}"
+                                                CommandParameter="{Binding .}"
+                                                FontSize="13"
+                                                CornerRadius="10"
+                                                Padding="10,6">
+                                            <Button.Triggers>
+                                                <DataTrigger TargetType="Button" Binding="{Binding IsOutOfStock}" Value="True">
+                                                    <Setter Property="BackgroundColor" Value="#FFEBEE" />
+                                                    <Setter Property="TextColor" Value="#C62828" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Button" Binding="{Binding IsOutOfStock}" Value="False">
+                                                    <Setter Property="BackgroundColor" Value="#E8F5E9" />
+                                                    <Setter Property="TextColor" Value="#2E7D32" />
+                                                </DataTrigger>
+                                            </Button.Triggers>
+                                        </Button>
+
+                                        <!-- Kustuta -->
+                                        <Button Grid.Column="3"
+                                                Text="🗑️"
+                                                BackgroundColor="Transparent"
+                                                TextColor="#F44336"
+                                                FontSize="16"
+                                                WidthRequest="40"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:PantryViewModel}}, Path=DeleteCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Text="{Binding Items.Count, StringFormat='Kokku: {0} toodet'}"
+                           FontSize="14"
+                           TextColor="#757575"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
