@@ -80,36 +80,12 @@ namespace HealthTrackerApp.ViewModels
         {
             try
             {
-                var name = await Shell.Current.DisplayPromptAsync("Uus retsept", "Retsepti nimi:", "OK", "Cancel", placeholder: "Näide: Kõrvitsapuder");
-                if (string.IsNullOrWhiteSpace(name))
-                    return;
-
-                var category = await Shell.Current.DisplayPromptAsync("Uus retsept", "Kategooria:", "OK", "Cancel", placeholder: "nt Hommikusöök", initialValue: "Muu");
-                if (category == null)
-                    category = "Muu";
-
-                var shortDesc = await Shell.Current.DisplayPromptAsync("Uus retsept", "Lühikirjeldus (valikuline):", "OK", "Cancel");
-                if (shortDesc == null) shortDesc = string.Empty;
-
-                var instructions = await Shell.Current.DisplayPromptAsync("Uus retsept", "Valmistamisjuhised (valikuline):", "OK", "Cancel");
-                if (instructions == null) instructions = string.Empty;
-
-                var r = new Recipe
-                {
-                    Name = name.Trim(),
-                    Category = string.IsNullOrWhiteSpace(category) ? "Muu" : category.Trim(),
-                    ShortDescription = shortDesc.Trim(),
-                    Instructions = instructions.Trim()
-                };
-
-                // Insert and reload
-                await _database.AddRecipeAsync(r);
-                await Shell.Current.DisplayAlert("Lisatud", "Uus retsept lisati.", "OK");
-                await LoadAsync(SearchText);
+                // Avame uue retsepti redigeerimisvaate (recipeId=0 tähistab uut retsepti)
+                await Shell.Current.GoToAsync($"{nameof(HealthTrackerApp.Views.RecipeEditPage)}?recipeId=0");
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Viga", $"Ei saanud lisada retsepti: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Viga", $"Ei saanud avada uue retsepti vormi: {ex.Message}", "OK");
             }
         }
 
@@ -119,37 +95,12 @@ namespace HealthTrackerApp.ViewModels
 
             try
             {
-                var existing = await _database.GetRecipeByIdAsync(suggestion.RecipeId);
-                if (existing == null)
-                {
-                    await Shell.Current.DisplayAlert("Viga", "Retsepti ei leitud.", "OK");
-                    return;
-                }
-
-                var name = await Shell.Current.DisplayPromptAsync("Muuda retsepti", "Nimi:", "OK", "Cancel", initialValue: existing.Name);
-                if (name == null) return;
-
-                var category = await Shell.Current.DisplayPromptAsync("Muuda retsepti", "Kategooria:", "OK", "Cancel", initialValue: existing.Category ?? "Muu");
-                if (category == null) category = existing.Category;
-
-                var shortDesc = await Shell.Current.DisplayPromptAsync("Muuda retsepti", "Lühikirjeldus:", "OK", "Cancel", initialValue: existing.ShortDescription ?? string.Empty);
-                if (shortDesc == null) shortDesc = existing.ShortDescription ?? string.Empty;
-
-                var instructions = await Shell.Current.DisplayPromptAsync("Muuda retsepti", "Juhised:", "OK", "Cancel", initialValue: existing.Instructions ?? string.Empty);
-                if (instructions == null) instructions = existing.Instructions ?? string.Empty;
-
-                existing.Name = name.Trim();
-                existing.Category = string.IsNullOrWhiteSpace(category) ? "Muu" : category.Trim();
-                existing.ShortDescription = shortDesc.Trim();
-                existing.Instructions = instructions.Trim();
-
-                await _database.UpdateRecipeAsync(existing);
-                await Shell.Current.DisplayAlert("Salvestatud", "Retsept salvestatud.", "OK");
-                await LoadAsync(SearchText);
+                // Navigeeri otse redigeerimisvaatele; vaade laadib retsepti oma viewmodeli kaudu.
+                await Shell.Current.GoToAsync($"{nameof(HealthTrackerApp.Views.RecipeEditPage)}?recipeId={suggestion.RecipeId}");
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Viga", $"Ei saanud muuta retsepti: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Viga", $"Ei saanud avada redigeerijat: {ex.Message}", "OK");
             }
         }
     }

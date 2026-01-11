@@ -342,6 +342,31 @@ namespace HealthTrackerApp.Services
             return await _database.UpdateAsync(recipe);
         }
 
+        // New: recipe ingredient operations
+        public async Task<int> AddRecipeIngredientAsync(RecipeIngredient ingredient)
+        {
+            await InitializeDatabaseAsync();
+            return await _database.InsertAsync(ingredient);
+        }
+
+        public async Task<int> UpdateRecipeIngredientAsync(RecipeIngredient ingredient)
+        {
+            await InitializeDatabaseAsync();
+            return await _database.UpdateAsync(ingredient);
+        }
+
+        public async Task<int> DeleteRecipeIngredientAsync(RecipeIngredient ingredient)
+        {
+            await InitializeDatabaseAsync();
+            return await _database.DeleteAsync(ingredient);
+        }
+
+        public async Task<int> DeleteRecipeIngredientsForRecipeAsync(int recipeId)
+        {
+            await InitializeDatabaseAsync();
+            return await _database.ExecuteAsync("DELETE FROM RecipeIngredient WHERE RecipeId = ?", recipeId);
+        }
+
         private static (double qty, string unit) TryParseAmount(string? amountText)
         {
             // Ootame formaati "500 ml", "1 tk", "0.5 l" jne. Kui ei saa aru, tagasta 1 tk.

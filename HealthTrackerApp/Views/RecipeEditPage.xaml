@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.Views.RecipeEditPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="Retsept"
+             BackgroundColor="#FAF8F5">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Ensure readable contrast across the page -->
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#37474F" />
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="#37474F" />
+                <Setter Property="PlaceholderColor" Value="#9E9E9E" />
+            </Style>
+
+            <Style TargetType="Editor">
+                <Setter Property="TextColor" Value="#37474F" />
+            </Style>
+
+            <Style TargetType="Picker">
+                <Setter Property="TextColor" Value="#37474F" />
+            </Style>
+
+            <!-- Default Button text color is dark; explicit overrides on primary action buttons remain -->
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="#37474F" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <viewmodel:RecipeEditViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="12" Padding="16">
+
+            
+            <Label Text="{Binding PageTitle}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#37474F" />
+
+            <Frame CornerRadius="12" BackgroundColor="White" Padding="12" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Nimi" FontAttributes="Bold" />
+                    <Entry Text="{Binding Name}" Placeholder="Retsepti nimi" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <VerticalStackLayout Grid.Column="0" Spacing="6">
+                            <Label Text="Kategooria" FontAttributes="Bold" />
+                            <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" Title="Vali kategooria" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Uus" FontAttributes="Bold" />
+                            <Entry Text="{Binding NewCategory}" Placeholder="Sisesta uus" WidthRequest="150" />
+                            <Button Text="Kasuta uut" Command="{Binding UseNewCategoryCommand}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Label Text="L&#xFC;hikirjeldus" FontAttributes="Bold" />
+                    <Entry Text="{Binding ShortDescription}" Placeholder="Lühikirjeldus (valikuline)" />
+
+                    <Label Text="Valmistusjuhend" FontAttributes="Bold" />
+                    <Editor Text="{Binding Instructions}" AutoSize="TextChanges" HeightRequest="140" BackgroundColor="#FAFAFA" />
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame CornerRadius="12" BackgroundColor="White" Padding="12" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Koostisosad" FontAttributes="Bold" />
+
+                    <!-- Add new ingredient row -->
+                    <Grid ColumnDefinitions="2*,1*,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                        <Entry Grid.Column="0" Text="{Binding NewIngredientName}" Placeholder="Koostis (nt: Pasta)" />
+                        <Entry Grid.Column="1" Text="{Binding NewIngredientAmount}" Placeholder="Kogus (nt: 200 g)" />
+                        <Button Grid.Column="2" Text="Lisa" Command="{Binding AddIngredientCommand}" />
+                    </Grid>
+
+                    <!-- Ingredients list -->
+                    <CollectionView ItemsSource="{Binding Ingredients}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="6">
+                                    <Label Grid.Column="0" Text="{Binding Display}" VerticalOptions="Center" />
+                                    <!-- Use ContentPage as visual ancestor and bind to its BindingContext.RemoveIngredientCommand -->
+                                    <Button Grid.Column="1"
+                                            Text="Eemalda"
+                                            BackgroundColor="#EF5350"
+                                            TextColor="White"
+                                            CornerRadius="6"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveIngredientCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <HorizontalStackLayout Spacing="12">
+                <Button Text="Salvesta" BackgroundColor="#4CAF50" TextColor="White" CornerRadius="8" Command="{Binding SaveCommand}" />
+                <Button Text="Loobu" BackgroundColor="#B0BEC5" TextColor="White" CornerRadius="8" Command="{Binding CancelCommand}" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
