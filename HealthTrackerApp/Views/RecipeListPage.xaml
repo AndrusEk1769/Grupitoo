@@ -51,6 +51,13 @@
                 </VerticalStackLayout>
             </Frame>
 
+            <!-- New recipe button -->
+            <Button Text="Uus Retsept"
+                    Command="{Binding NewRecipeCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10" />
+
             <CollectionView ItemsSource="{Binding Suggestions}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -82,7 +89,7 @@
                                        FontSize="13"
                                        TextColor="#757575" />
 
-                                <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                                <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
                                     <Label Grid.Column="0"
                                            Text="{Binding Category, StringFormat='📌 {0}'}"
                                            FontSize="12"
@@ -98,6 +105,17 @@
                                            Text="{Binding MissingIngredients, StringFormat='Puudu: {0}'}"
                                            FontSize="12"
                                            TextColor="#D32F2F" />
+
+                                    <!-- Edit button -->
+                                    <Button Grid.Column="3"
+                                            Text="Muuda"
+                                            FontSize="12"
+                                            Padding="6,4"
+                                            BackgroundColor="#FFB300"
+                                            TextColor="White"
+                                            CornerRadius="8"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RecipeListViewModel}}, Path=EditRecipeCommand}"
+                                            CommandParameter="{Binding .}" />
                                 </Grid>
 
                                 <Button Grid.RowSpan="3" Grid.ColumnSpan="2"

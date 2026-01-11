@@ -327,6 +327,21 @@ namespace HealthTrackerApp.Services
             await _database.UpdateAsync(existing);
         }
 
+        // New: add recipe
+        public async Task<int> AddRecipeAsync(Recipe recipe)
+        {
+            await InitializeDatabaseAsync();
+            await _database.InsertAsync(recipe);
+            return recipe.Id;
+        }
+
+        // New: update recipe
+        public async Task<int> UpdateRecipeAsync(Recipe recipe)
+        {
+            await InitializeDatabaseAsync();
+            return await _database.UpdateAsync(recipe);
+        }
+
         private static (double qty, string unit) TryParseAmount(string? amountText)
         {
             // Ootame formaati "500 ml", "1 tk", "0.5 l" jne. Kui ei saa aru, tagasta 1 tk.
