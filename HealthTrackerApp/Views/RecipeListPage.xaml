@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.Views.RecipeListPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="Retseptid"
+             BackgroundColor="#E1BEE7">
+
+    <ContentPage.BindingContext>
+        <viewmodel:RecipeListViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="20">
+
+            <Label Text="🍽️ Retseptide nimekiri"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#4A148C" />
+
+            <Frame CornerRadius="15"
+                   BackgroundColor="#F3E5F5"
+                   BorderColor="#E1BEE7"
+                   Padding="12">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Soovita retsepte Lao vaate põhjal"
+                           FontSize="14"
+                           TextColor="#6A1B9A" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Entry Grid.Column="0"
+                               Text="{Binding SearchText}"
+                               Placeholder="Otsi (nt: pasta, hommikusöök...)"
+                               BackgroundColor="#F5F5F5"
+                               TextColor="#212121"
+                               ClearButtonVisibility="WhileEditing" />
+                        <Button Grid.Column="1"
+                                Text="Otsi"
+                                Command="{Binding SearchCommand}"
+                                BackgroundColor="#9C27B0"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="50" />
+                    </Grid>
+
+                    <Button Text="Värskenda"
+                            Command="{Binding RefreshCommand}"
+                            BackgroundColor="#9C27B0"
+                            TextColor="White"
+                            CornerRadius="10" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- New recipe button -->
+            <Button Text="Uus Retsept"
+                    Command="{Binding NewRecipeCommand}"
+                    BackgroundColor="#9C27B0"
+                    TextColor="White"
+                    CornerRadius="10" />
+
+            <CollectionView ItemsSource="{Binding Suggestions}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="15"
+                               BackgroundColor="#F3E5F5"
+                               BorderColor="#E1BEE7"
+                               Padding="14"
+                               Margin="0,0,0,10">
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="6" ColumnSpacing="10">
+
+                                <Label Grid.Row="0" Grid.Column="0"
+                                       Text="{Binding Name}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#4A148C" />
+
+                                <Frame Grid.Row="0" Grid.Column="1"
+                                       CornerRadius="10"
+                                       Padding="8,4"
+                                       BackgroundColor="#E1BEE7">
+                                    <Label Text="{Binding MatchPercent, StringFormat='{0}%'}"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#4A148C" />
+                                </Frame>
+
+                                <Label Grid.Row="1" Grid.ColumnSpan="2"
+                                       Text="{Binding ShortDescription}"
+                                       FontSize="13"
+                                       TextColor="#6A1B9A" />
+
+                                <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Category, StringFormat='📌 {0}'}"
+                                           FontSize="12"
+                                           TextColor="#6A1B9A" />
+
+                                    <ProgressBar Grid.Column="1"
+                                                 Progress="{Binding MatchScore}"
+                                                 BackgroundColor="#F3E5F5"
+                                                 ProgressColor="#9C27B0"
+                                                 VerticalOptions="Center" />
+
+                                    <Label Grid.Column="2"
+                                           Text="{Binding MissingIngredients, StringFormat='Puudu: {0}'}"
+                                           FontSize="12"
+                                           TextColor="#D32F2F" />
+
+                                    <!-- Edit button -->
+                                    <Button Grid.Column="3"
+                                            Text="Muuda"
+                                            FontSize="12"
+                                            Padding="6,4"
+                                            BackgroundColor="#FFB300"
+                                            TextColor="White"
+                                            CornerRadius="8"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RecipeListViewModel}}, Path=EditRecipeCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+
+                                <Button Grid.RowSpan="3" Grid.ColumnSpan="2"
+                                        Text=""
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RecipeListViewModel}}, Path=OpenRecipeCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

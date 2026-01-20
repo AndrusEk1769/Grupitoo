@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.MainPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="TerviseJälgija"
+             BackgroundColor="#E1BEE7">
+
+    <ContentPage.BindingContext>
+        <viewmodel:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Tervituskaart -->
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#CE93D8" 
+                   BorderColor="#BA68C8"
+                   Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding CurrentUser.Name, StringFormat='Tere, {0}! 👋'}" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#4A148C"/>
+                    <Label Text="{Binding DateTime.Now, StringFormat='Täna on {0:dddd, dd MMMM yyyy}'}" 
+                           FontSize="14"
+                           TextColor="#6A1B9A"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Kiired nupud -->
+            <Grid ColumnDefinitions="*,*" 
+                  ColumnSpacing="12" RowSpacing="12">
+
+                <Frame Grid.Column="0" 
+                       CornerRadius="12" 
+                       BackgroundColor="#9C27B0" 
+                       Padding="0"
+                       HasShadow="True">
+                    <Button Text="🍎 Lisa Toit" 
+                            Command="{Binding GoToFoodCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="80"/>
+                </Frame>
+
+                <Frame Grid.Column="1" 
+                       CornerRadius="12" 
+                       BackgroundColor="#9C27B0" 
+                       Padding="0"
+                       HasShadow="True">
+                    <Button Text="🍽️ Lisa Retsept" 
+                            Command="{Binding GoToRecipeCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="80"/>
+                </Frame>
+            </Grid>
+
+            <!-- Lao vaate avamine -->
+            <Frame CornerRadius="12"
+                   BackgroundColor="#9C27B0"
+                   Padding="0"
+                   HasShadow="True">
+                <Button Text="🏠 Lao vaade"
+                        Command="{Binding GoToPantryCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        HeightRequest="60" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

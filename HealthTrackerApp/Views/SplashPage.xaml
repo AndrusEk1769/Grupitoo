@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.Views.SplashPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             BackgroundColor="#E1BEE7"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodel:SplashViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <!-- Background gradient effect -->
+        <BoxView BackgroundColor="#CE93D8" 
+                 Opacity="0.3"
+                 VerticalOptions="Fill"
+                 HorizontalOptions="Fill" />
+
+        <VerticalStackLayout VerticalOptions="Center" 
+                           HorizontalOptions="Center"
+                           Spacing="50"
+                           Padding="40">
+            
+            <!-- Icon/Emoji -->
+            <Label Text="🏠"
+                   FontSize="80"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <!-- Logo/Title -->
+            <Label Text="PantryPal"
+                   FontSize="56"
+                   FontAttributes="Bold"
+                   TextColor="#4A148C"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <!-- Subtitle -->
+            <Label Text="TerviseJälgija"
+                   FontSize="20"
+                   TextColor="#6A1B9A"
+                   HorizontalOptions="Center"
+                   Opacity="0.9" />
+
+            <!-- Enter Button -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#9C27B0"
+                   BorderColor="#7B1FA2"
+                   Padding="0"
+                   HasShadow="True"
+                   Margin="0,40,0,0">
+                <Button Text="Sisene"
+                        Command="{Binding EnterCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        HeightRequest="65"
+                        WidthRequest="220"
+                        HorizontalOptions="Center" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

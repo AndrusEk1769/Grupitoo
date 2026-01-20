@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthTrackerApp.Views.RecipeDetailPage"
+             xmlns:viewmodel="clr-namespace:HealthTrackerApp.ViewModels"
+             Title="Retsept"
+             BackgroundColor="#E1BEE7">
+
+    <ContentPage.BindingContext>
+        <viewmodel:RecipeDetailViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="20">
+
+            <Label Text="{Binding Recipe.Name}"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#4A148C" />
+
+            <Label Text="{Binding Recipe.ShortDescription}"
+                   FontSize="14"
+                   TextColor="#6A1B9A" />
+
+            <Frame CornerRadius="15"
+                   BackgroundColor="#F3E5F5"
+                   BorderColor="#E1BEE7"
+                   Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Koostisosad"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#4A148C" />
+
+                    <CollectionView ItemsSource="{Binding Ingredients}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame CornerRadius="10"
+                                       BackgroundColor="#E1BEE7"
+                                       BorderColor="#CE93D8"
+                                       Padding="10"
+                                       Margin="0,0,0,8">
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Display}"
+                                               FontSize="14"
+                                               TextColor="#4A148C" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding StatusText}"
+                                               FontSize="12"
+                                               VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsMissing}" Value="True">
+                                                    <Setter Property="TextColor" Value="#880E4F" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsMissing}" Value="False">
+                                                    <Setter Property="TextColor" Value="#4A148C" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Lisa puuduvad lattu (otsas)"
+                            Command="{Binding AddMissingToPantryCommand}"
+                            BackgroundColor="#9C27B0"
+                            TextColor="White"
+                            CornerRadius="10" />
+
+                    <Button Text="Otsi internetist"
+                            Command="{Binding OpenWebSearchCommand}"
+                            BackgroundColor="#9C27B0"
+                            TextColor="White"
+                            CornerRadius="10" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame CornerRadius="15"
+                   BackgroundColor="#F3E5F5"
+                   BorderColor="#E1BEE7"
+                   Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Valmistamine"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#4A148C" />
+
+                    <Label Text="{Binding Recipe.Instructions}"
+                           FontSize="14"
+                           TextColor="#4A148C" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
